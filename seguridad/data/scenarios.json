@@ -1,0 +1,188 @@
+{
+  "trainingScenarios": [
+    {
+      "id": "email-urgency",
+      "type": "phishing",
+      "category": "Phishing por correo",
+      "channel": "Correo electrónico",
+      "sender": "soporte@netflix-cuenta-actualizacion.com",
+      "subject": "Problema con su pago mensual: actualice sus datos",
+      "body": "Tu cuenta será cancelada en 24 horas. Usa el enlace del mensaje para actualizar tu tarjeta. El dominio no coincide con el sitio oficial y el mensaje crea urgencia.",
+      "decisions": [
+        {"text": "Abrir el enlace e iniciar sesión para evitar el bloqueo", "safe": false, "score": 0, "riskDelta": 18, "feedback": "La urgencia y el dominio parecido son señales de phishing.", "consequence": "En esta simulación, la página falsa intenta capturar tus datos. Cierra la página y no introduzcas información."},
+        {"text": "Verificar el dominio por un canal oficial y reportar el correo", "safe": true, "score": 15, "riskDelta": -12, "feedback": "Buena decisión: no usaste el enlace y verificaste por un canal confiable.", "consequence": "Reportas el mensaje y revisas tu cuenta escribiendo manualmente la dirección oficial en el navegador."},
+        {"text": "Reportar el mensaje como phishing y eliminarlo sin abrir enlaces", "safe": true, "score": 13, "riskDelta": -10, "feedback": "Buena respuesta: lo retiraste de tu bandeja y ayudaste a que la institución investigue el intento.", "consequence": "El mensaje se reporta y elimina sin exponer tus credenciales. Si te preocupa tu cuenta, compruébala desde el sitio oficial."},
+        {"text": "Responder al remitente para preguntar si es legítimo", "safe": false, "score": 2, "riskDelta": 8, "feedback": "Responder confirma que tu dirección está activa y no verifica la identidad del remitente.", "consequence": "El atacante puede insistir. No respondas; reporta y verifica con la entidad por separado."}
+      ]
+    },
+    {
+      "id": "campus-grades",
+      "type": "phishing",
+      "category": "Phishing por correo",
+      "channel": "Correo institucional",
+      "sender": "servicios-escolares@campus.edu.mx",
+      "subject": "Actas disponibles en el portal escolar",
+      "body": "El mensaje informa que ya están publicadas las actas y no incluye un enlace ni solicita credenciales. Aun así, revisa cuidadosamente el dominio real del remitente.",
+      "decisions": [
+        {"text": "Abrir un adjunto inesperado que supuestamente contiene las calificaciones", "safe": false, "score": 0, "riskDelta": 14, "feedback": "No se anunciaba un adjunto; abrir archivos inesperados puede ser riesgoso.", "consequence": "No abras el archivo. Confirma con servicios escolares usando sus datos de contacto conocidos."},
+        {"text": "Entrar al portal escribiendo su dirección conocida y comprobar el remitente", "safe": true, "score": 15, "riskDelta": -10, "feedback": "Correcto: usaste un canal conocido y comprobaste el contexto del mensaje.", "consequence": "Accedes directamente al portal oficial sin depender de enlaces del mensaje."},
+        {"text": "Reenviar el mensaje a compañeros para que prueben el enlace", "safe": false, "score": 0, "riskDelta": 10, "feedback": "No distribuyas un mensaje no verificado; podrías exponer a otras personas.", "consequence": "Evita reenviarlo. Consulta al área escolar por un medio oficial."}
+      ]
+    },
+    {
+      "id": "cloud-quota",
+      "type": "phishing",
+      "category": "Phishing por correo",
+      "channel": "Correo electrónico",
+      "sender": "avisos@cloud-storage-alert.example",
+      "subject": "Tu espacio se eliminará hoy",
+      "body": "El mensaje afirma que tu almacenamiento está lleno y amenaza con borrar tus archivos en una hora. Incluye un botón para «recuperar» el espacio y pide iniciar sesión.",
+      "decisions": [
+        {"text": "Abrir el botón e introducir la contraseña para conservar los archivos", "safe": false, "score": 0, "riskDelta": 18, "feedback": "La amenaza de pérdida inmediata y el dominio no verificado son señales de alerta.", "consequence": "No ingreses tus credenciales. Revisa el almacenamiento desde la aplicación o el sitio oficial."},
+        {"text": "Abrir el servicio desde la app conocida y comprobar el estado de la cuenta", "safe": true, "score": 15, "riskDelta": -12, "feedback": "Correcto: comprobaste la afirmación desde un canal independiente.", "consequence": "Si hay un problema real, el panel oficial lo mostrará sin necesidad de seguir un enlace recibido."},
+        {"text": "Descargar el supuesto comprobante adjunto para revisar el espacio", "safe": false, "score": 0, "riskDelta": 14, "feedback": "Un adjunto inesperado no es necesario para comprobar una cuota.", "consequence": "No abras ni reenvíes el archivo; reporta el mensaje y usa la aplicación oficial."}
+      ]
+    },
+    {
+      "id": "smishing-bank",
+      "type": "smishing",
+      "category": "Smishing (SMS)",
+      "channel": "Mensaje SMS",
+      "sender": "Remitente: BANCO-ALERTA (número desconocido)",
+      "subject": "Compra retenida",
+      "body": "SMS: «Detectamos una compra. Tu cuenta será suspendida. Confirma tu identidad aquí: banco-seguro-verificacion.example». No reconoces la compra y el mensaje presiona para actuar rápido.",
+      "decisions": [
+        {"text": "Abrir el enlace y escribir el código que llegue por SMS", "safe": false, "score": 0, "riskDelta": 20, "feedback": "Nunca compartas contraseñas ni códigos de un solo uso desde un enlace recibido.", "consequence": "El sitio simulado busca robar credenciales y códigos. Cierra el mensaje y contacta al banco desde su app o número oficial."},
+        {"text": "No abrirlo; contactar al banco usando la app o el número de la tarjeta", "safe": true, "score": 15, "riskDelta": -12, "feedback": "Correcto: verificaste independientemente y no compartiste códigos.", "consequence": "El banco puede confirmar si hay una operación real por un canal que ya conoces."},
+        {"text": "Llamar al número incluido en el propio SMS", "safe": false, "score": 1, "riskDelta": 10, "feedback": "El número del mensaje también puede estar controlado por quien lo envió.", "consequence": "Busca el contacto oficial en la tarjeta, la aplicación instalada o el sitio escrito manualmente."}
+      ]
+    },
+    {
+      "id": "vishing-support",
+      "type": "vishing",
+      "category": "Vishing (llamadas)",
+      "channel": "Llamada telefónica",
+      "sender": "Llamada entrante: «Soporte técnico»",
+      "subject": "Actividad sospechosa en tu cuenta",
+      "body": "La persona afirma que detectó intrusos, exige que instales una herramienta de acceso remoto y te pide leerle un código de verificación. No solicitaste soporte.",
+      "decisions": [
+        {"text": "Instalar la herramienta y compartir el código para que te ayuden", "safe": false, "score": 0, "riskDelta": 22, "feedback": "El acceso remoto y los códigos de verificación pueden dar control de tu dispositivo o cuenta.", "consequence": "Cuelga. Si ya instalaste algo, desconecta el equipo de la red y contacta al soporte oficial."},
+        {"text": "Colgar y llamar al soporte desde el contacto oficial", "safe": true, "score": 15, "riskDelta": -12, "feedback": "Correcto: una llamada entrante no prueba la identidad de quien llama.", "consequence": "Verificas el aviso con un canal independiente y no compartes códigos."},
+        {"text": "Dar solo tu nombre y correo para confirmar la cuenta", "safe": false, "score": 1, "riskDelta": 8, "feedback": "Los datos personales pueden ayudar a hacer más convincente el siguiente intento.", "consequence": "No proporciones información; termina la llamada y verifica por canales oficiales."}
+      ]
+    },
+    {
+      "id": "password-reuse",
+      "type": "password",
+      "category": "Contraseñas y robo de cuentas",
+      "channel": "Cuenta de estudiante",
+      "sender": "Aviso de inicio de sesión",
+      "subject": "Se detectó un acceso que no reconoces",
+      "body": "Recibes una alerta auténtica de un inicio de sesión desconocido. Usabas la misma contraseña en varios servicios.",
+      "decisions": [
+        {"text": "Cambiar la contraseña desde el sitio escrito manualmente, cerrar otras sesiones y activar MFA", "safe": true, "score": 15, "riskDelta": -14, "feedback": "Correcto: cambiaste credenciales desde el canal legítimo y contuviste sesiones.", "consequence": "Usa una contraseña única, revisa los métodos de recuperación y avisa al proveedor si el acceso continúa."},
+        {"text": "Reutilizar la misma contraseña con un número al final", "safe": false, "score": 0, "riskDelta": 18, "feedback": "Variaciones simples de una clave reutilizada pueden ser fáciles de adivinar.", "consequence": "Crea una clave única y larga con un gestor; protege primero el correo de recuperación."},
+        {"text": "Pulsar el enlace de la alerta y escribir la contraseña de inmediato", "safe": false, "score": 0, "riskDelta": 20, "feedback": "Incluso una alerta convincente debe verificarse; los enlaces pueden imitar el portal.", "consequence": "Abre el servicio desde su app o dirección conocida y revisa actividad y sesiones."}
+      ]
+    },
+    {
+      "id": "wifi-cafe",
+      "type": "wifi",
+      "category": "Wi-Fi pública",
+      "channel": "Cafetería",
+      "sender": "Redes disponibles: Cafe_Gratis y Cafe_WiFi_Oficial",
+      "subject": "Necesitas consultar el correo en una red pública",
+      "body": "Hay dos redes con nombres parecidos. El personal del local puede confirmar cuál es la red correcta. Tienes datos móviles disponibles y no necesitas usar banca en este momento.",
+      "decisions": [
+        {"text": "Conectarte a la red abierta con más señal e iniciar sesión en todo", "safe": false, "score": 0, "riskDelta": 18, "feedback": "Una red abierta o falsa puede exponer tráfico o facilitar páginas engañosas.", "consequence": "Desconéctate de esa red. Prefiere datos móviles o confirma el SSID con el personal; una VPN confiable añade protección, pero no vuelve segura una red falsa."},
+        {"text": "Confirmar el nombre de la red, usar datos móviles o una VPN confiable y evitar operaciones sensibles", "safe": true, "score": 15, "riskDelta": -12, "feedback": "Correcto: verificaste la red y elegiste una opción más segura.", "consequence": "Mantén HTTPS, desactiva la conexión automática y evita transacciones sensibles en redes públicas."},
+        {"text": "Usar la red que tenga «WiFi» en su nombre porque parece oficial", "safe": false, "score": 0, "riskDelta": 12, "feedback": "El nombre visible no autentica al punto de acceso.", "consequence": "Pregunta al personal o usa tu conexión móvil; olvida redes desconocidas al terminar."}
+      ]
+    },
+    {
+      "id": "file-crack",
+      "type": "file",
+      "category": "Archivos sospechosos",
+      "channel": "Descarga web",
+      "sender": "Sitio no oficial de descargas",
+      "subject": "Instalador «crack» con antivirus desactivado",
+      "body": "Una página ofrece software de pago gratis. El instalador requiere permisos de administrador y la página indica desactivar el antivirus. No tienes forma de verificar el origen.",
+      "decisions": [
+        {"text": "Desactivar el antivirus e instalarlo para probar", "safe": false, "score": 0, "riskDelta": 22, "feedback": "Desactivar protecciones y ejecutar un crack es una señal de alto riesgo.", "consequence": "Cancela la descarga, elimina el archivo sin abrirlo y usa fuentes oficiales."},
+        {"text": "No ejecutarlo; eliminarlo y buscar una fuente oficial o alternativa legítima", "safe": true, "score": 15, "riskDelta": -14, "feedback": "Correcto: evitaste conceder privilegios a un archivo de origen dudoso.", "consequence": "Mantén el sistema actualizado y descarga software solo de su proveedor o tienda confiable."},
+        {"text": "Abrir el archivo en el equipo para ver si el antivirus lo detecta", "safe": false, "score": 0, "riskDelta": 15, "feedback": "No es necesario ejecutar un archivo sospechoso para evaluarlo.", "consequence": "No lo abras. Si ya se ejecutó, desconecta el dispositivo y pide ayuda técnica."}
+      ]
+    },
+    {
+      "id": "attachment-invoice",
+      "type": "file",
+      "category": "Archivos sospechosos",
+      "channel": "Adjunto de correo",
+      "sender": "facturas@proveedor-desconocido.example",
+      "subject": "Factura pendiente: abre el archivo adjunto",
+      "body": "No esperabas una factura. El adjunto tiene doble extensión y el correo pide habilitar macros para leer el documento.",
+      "decisions": [
+        {"text": "Habilitar macros y abrirlo porque parece una factura", "safe": false, "score": 0, "riskDelta": 20, "feedback": "Una doble extensión y macros inesperadas son señales de alerta.", "consequence": "No abras el archivo; verifica la factura con el proveedor por un contacto conocido y reporta el mensaje."},
+        {"text": "Verificar con el proveedor por un contacto conocido y reportar el correo", "safe": true, "score": 15, "riskDelta": -12, "feedback": "Correcto: comprobaste el contexto sin ejecutar el adjunto.", "consequence": "Si el documento es legítimo, el proveedor podrá reenviarlo por el canal acordado."},
+        {"text": "Reenviarlo a un compañero para que lo abra primero", "safe": false, "score": 0, "riskDelta": 12, "feedback": "No traslades el riesgo a otra persona.", "consequence": "Aísla el mensaje y utiliza el proceso de reporte de tu institución."}
+      ]
+    },
+    {
+      "id": "social-urgency",
+      "type": "social",
+      "category": "Ingeniería social",
+      "channel": "Chat de trabajo",
+      "sender": "Perfil que dice ser tu supervisor",
+      "subject": "Solicitud urgente y confidencial",
+      "body": "Te piden comprar tarjetas de regalo y enviar los códigos de inmediato. La persona dice estar en una reunión y pide que no consultes a nadie.",
+      "decisions": [
+        {"text": "Comprar y enviar los códigos para ayudar rápido", "safe": false, "score": 0, "riskDelta": 20, "feedback": "La urgencia, el secreto y el método de pago inusual son señales de fraude.", "consequence": "No envíes dinero ni códigos. Contacta al supervisor por un canal corporativo ya conocido."},
+        {"text": "Confirmar la solicitud por otro canal y reportar el perfil sospechoso", "safe": true, "score": 15, "riskDelta": -14, "feedback": "Correcto: verificaste identidad y contexto de forma independiente.", "consequence": "La organización puede bloquear el perfil y alertar a otras personas."},
+        {"text": "Pedirle al perfil una foto para confirmar quién es", "safe": false, "score": 2, "riskDelta": 8, "feedback": "Una foto no demuestra identidad; puede ser robada o generada.", "consequence": "Cierra el chat y confirma por el directorio o teléfono oficial."}
+      ]
+    },
+    {
+      "id": "account-mfa",
+      "type": "password",
+      "category": "Contraseñas y robo de cuentas",
+      "channel": "Alerta de autenticación",
+      "sender": "Notificación de MFA",
+      "subject": "Solicitud de acceso que no iniciaste",
+      "body": "Tu teléfono muestra una solicitud de aprobación de inicio de sesión que no reconoces. Alguien te llama diciendo que es soporte y que debes aceptarla.",
+      "decisions": [
+        {"text": "Denegar la solicitud, no compartir códigos y cambiar la contraseña desde el servicio oficial", "safe": true, "score": 15, "riskDelta": -14, "feedback": "Correcto: aprobaciones inesperadas deben rechazarse y reportarse.", "consequence": "Revisa sesiones abiertas y métodos de recuperación; contacta soporte oficial si vuelve a ocurrir."},
+        {"text": "Aprobarla para que el supuesto soporte termine la llamada", "safe": false, "score": 0, "riskDelta": 22, "feedback": "Aprobar una solicitud que no iniciaste puede entregar acceso a un atacante.", "consequence": "Deniega la solicitud y sigue el proceso de recuperación de cuenta."},
+        {"text": "Dictar el código de MFA para que soporte investigue", "safe": false, "score": 0, "riskDelta": 22, "feedback": "Los códigos de MFA son secretos: nunca los dictes a otra persona.", "consequence": "Cuelga y reporta la llamada mediante el canal oficial."}
+      ]
+    }
+  ],
+  "glossary": [
+    {"title":"Phishing","category":"Ingeniería social","gravity":"alta","desc":"Suplantación mediante correos o páginas falsas para inducir a compartir información, abrir enlaces o descargar archivos."},
+    {"title":"Smishing","category":"Ingeniería social","gravity":"alta","desc":"Phishing enviado por SMS o mensajería. Desconfía de enlaces inesperados, urgencias y solicitudes de códigos."},
+    {"title":"Vishing","category":"Ingeniería social","gravity":"alta","desc":"Fraude por llamada de voz en el que el interlocutor suplanta a soporte, un banco u otra entidad para obtener datos o acceso."},
+    {"title":"Ingeniería social","category":"Psicología del engaño","gravity":"alta","desc":"Manipulación que explota confianza, autoridad, urgencia, miedo o curiosidad para lograr una acción insegura."},
+    {"title":"Ransomware","category":"Malware","gravity":"critica","desc":"Malware que puede cifrar archivos y exigir un pago. Mantén copias de seguridad desconectadas y reporta incidentes; no ejecutes adjuntos dudosos."},
+    {"title":"Malware","category":"Amenazas","gravity":"alta","desc":"Software diseñado para realizar acciones no deseadas, como robar datos, espiar o dañar sistemas."},
+    {"title":"Adjunto malicioso","category":"Amenazas","gravity":"alta","desc":"Archivo que aparenta ser legítimo pero puede ejecutar código dañino. Revisa el origen y no habilites macros inesperadas."},
+    {"title":"Extensión doble","category":"Archivos","gravity":"media","desc":"Nombre como factura.pdf.exe que puede ocultar el tipo real del archivo si el sistema no muestra extensiones."},
+    {"title":"Contraseña única","category":"Identidad digital","gravity":"alta","desc":"Clave distinta para cada servicio. Evita que una filtración en un sitio permita entrar en tus otras cuentas; un gestor ayuda a administrarlas."},
+    {"title":"Frase de contraseña","category":"Identidad digital","gravity":"media","desc":"Cadena larga y exclusiva, fácil de recordar y difícil de adivinar. Evita frases célebres, datos personales y patrones comunes."},
+    {"title":"MFA / autenticación multifactor","category":"Identidad digital","gravity":"alta","desc":"Verificación adicional además de la contraseña. Rechaza solicitudes que no iniciaste y nunca compartas códigos de un solo uso."},
+    {"title":"Relleno de credenciales","category":"Robo de cuentas","gravity":"alta","desc":"Intentos automatizados de acceso usando pares de usuario y contraseña filtrados en otros servicios. Las claves únicas reducen el riesgo."},
+    {"title":"Wi-Fi abierta","category":"Redes","gravity":"media","desc":"Red pública sin contraseña o con protección limitada. Confirma el nombre oficial, evita operaciones sensibles y prefiere una conexión confiable."},
+    {"title":"VPN","category":"Redes","gravity":"media","desc":"Túnel cifrado entre dispositivo y proveedor VPN. Protege parte del tráfico en redes públicas, pero no garantiza que el sitio o la red sean confiables."},
+    {"title":"Man-in-the-Middle (MitM)","category":"Redes","gravity":"alta","desc":"Intercepción o alteración de comunicaciones entre partes. Verifica redes y sitios, y no ignores advertencias de certificados."},
+    {"title":"HTTPS y certificado TLS","category":"Web","gravity":"media","desc":"HTTPS cifra la conexión con el sitio indicado, pero no demuestra por sí solo que el sitio sea legítimo. Comprueba el dominio."},
+    {"title":"Inyección SQL (SQLi)","category":"Vulnerabilidad web","gravity":"critica","desc":"Manipulación de consultas a bases de datos por entradas mal tratadas. Se previene con consultas parametrizadas y validación adecuada."},
+    {"title":"Cross-Site Scripting (XSS)","category":"Vulnerabilidad web","gravity":"alta","desc":"Inyección de contenido ejecutable en páginas visitadas por otras personas. Codifica la salida y evita insertar contenido no confiable como HTML."},
+    {"title":"Copia de seguridad","category":"Protección de datos","gravity":"media","desc":"Copia recuperable de información importante. Mantén varias copias y prueba periódicamente que se puedan restaurar."},
+    {"title":"Gestor de contraseñas","category":"Identidad digital","gravity":"media","desc":"Herramienta que genera y almacena credenciales únicas. Protege la cuenta del gestor con una frase robusta y MFA."}
+  ],
+  "ctfChallenges": [
+    {"id":1,"title":"Reto 1: Criptografía Básica (César)","category":"Criptografía","difficulty":"Baja","desc":"Mensaje cifrado con César y corrimiento de 3: FLVEHUHYLVWD. Descifra la palabra en español.","flag":"ciberrevista"},
+    {"id":2,"title":"Reto 2: Esteganografía Visual","category":"Esteganografía","difficulty":"Media","desc":"Convierte a texto ASCII: 01010011 01100101 01100011 01110101 01110010 01101111","flag":"Securo"},
+    {"id":3,"title":"Reto 3: Análisis de Hash MD5","category":"Forensic","difficulty":"Media","desc":"Hash de una contraseña muy común: 827ccb0eea8a706c4c34a16891f84e7b. ¿Cuál es el texto plano?","flag":"12345"},
+    {"id":4,"title":"Reto 4: Protocolos de Red","category":"Redes","difficulty":"Baja","desc":"Puerto estándar por defecto de HTTPS (SSL/TLS). Escribe solo el número.","flag":"443"},
+    {"id":5,"title":"Reto 5: Web Injection","category":"Web App","difficulty":"Alta","desc":"¿Qué técnica separa código y datos para evitar inyección SQL? Escribe en minúsculas con guion bajo.","flag":"consultas_preparadas"}
+  ]
+}

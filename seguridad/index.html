@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self'; object-src 'none'; base-uri 'self';" />
+    <title>CIBERGUARD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="auth-gate" class="auth-gate">
+      <section class="card auth-card p-4 p-md-5" aria-labelledby="auth-title">
+        <div class="text-center mb-4">
+          <i class="fa-solid fa-shield-halved text-primary fs-1"></i>
+          <h1 id="auth-title" class="h3 fw-bold mt-2">Acceso a CIBERGUARD</h1>
+          <p class="text-muted mb-0">Crea una cuenta o inicia sesión para guardar tu progreso.</p>
+        </div>
+        <div class="btn-group w-100 mb-3" role="group" aria-label="Tipo de acceso">
+          <button id="auth-login-mode" class="btn btn-primary" type="button">Iniciar sesión</button>
+          <button id="auth-register-mode" class="btn btn-outline-primary" type="button">Crear cuenta</button>
+        </div>
+        <form id="auth-form" novalidate>
+          <div id="auth-name-field" class="mb-3 d-none">
+            <label for="auth-name" class="form-label">Nombre</label>
+            <input id="auth-name" class="form-control" type="text" maxlength="80" autocomplete="name" />
+          </div>
+          <div id="auth-institution-field" class="mb-3 d-none">
+            <label for="auth-institution" class="form-label">Institución</label>
+            <input id="auth-institution" class="form-control" type="text" maxlength="100" autocomplete="organization" />
+          </div>
+          <div class="mb-3">
+            <label for="auth-email" class="form-label">Correo</label>
+            <input id="auth-email" class="form-control" type="email" maxlength="254" autocomplete="email" required />
+          </div>
+          <div class="mb-3">
+            <label for="auth-password" class="form-label">Contraseña</label>
+            <input id="auth-password" class="form-control" type="password" minlength="12" maxlength="128" autocomplete="current-password" required />
+            <div id="auth-password-help" class="form-text text-muted">Usa al menos 12 caracteres. Para una cuenta nueva, crea una contraseña única.</div>
+          </div>
+          <div id="auth-message" class="small mb-3" role="alert" aria-live="polite"></div>
+          <button id="auth-submit" class="btn btn-primary w-100" type="submit">Iniciar sesión</button>
+        </form>
+      </section>
+    </div>
+
+    <nav class="navbar navbar-expand-lg app-navbar sticky-top">
+      <div class="container-fluid px-4">
+        <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="#" onclick="switchView('dashboard')">
+          <i class="fa-solid fa-shield-halved text-primary fs-3"></i>
+          <span>CIBER<span class="text-primary">GUARD</span></span>
+          <span class="badge bg-primary fs-7 text-uppercase ms-1">Estudiantes</span>
+        </a>
+        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item"><a class="nav-link active" href="#" onclick="switchView('dashboard')" id="nav-dashboard"><i class="fa-solid fa-chart-line me-1"></i> Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="switchView('training')" id="nav-training"><i class="fa-solid fa-envelope-circle-check me-1"></i> Simulador Phishing</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="switchView('glossary')" id="nav-glossary"><i class="fa-solid fa-book me-1"></i> Glosario</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="switchView('ctf')" id="nav-ctf"><i class="fa-solid fa-flag me-1"></i> Retos CTF</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="switchView('credential')" id="nav-credential"><i class="fa-solid fa-id-card me-1"></i> Credencial & QR</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="switchView('reports')" id="nav-reports"><i class="fa-solid fa-file-shield me-1"></i> Reportes & Diploma</a></li>
+            <li class="nav-item ms-lg-3">
+              <button class="btn btn-sm btn-outline-primary w-100" onclick="editStudentProfile()"><i class="fa-solid fa-user-pen me-1"></i> Perfil</button>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <button id="logout-button" class="btn btn-sm btn-outline-secondary w-100" type="button"><i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Cerrar sesión</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container my-4 flex-grow-1">
+      <section id="view-dashboard" class="view-section active">
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card p-4">
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <h2 class="fw-bold mb-1"><i class="fa-solid fa-user-shield text-primary me-2"></i> ¡Bienvenido, <span id="dash-student-name">Estudiante CiberGuardián</span>!</h2>
+                  <p class="text-muted mb-2">Institución: <span id="dash-student-inst" class="text-white">Universidad Tecnológica</span> | ID: <span id="dash-student-id" class="text-primary font-monospace">CG-2026-001</span></p>
+                  <div><span class="badge badge-media fs-6 px-3 py-1" id="dash-student-rank">Novato en Ciberseguridad</span></div>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                  <button class="btn btn-primary btn-lg px-4" onclick="switchView('training')"><i class="fa-solid fa-play me-2"></i> Iniciar Entrenamiento</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-3 col-6">
+            <div class="card p-3 text-center h-100">
+              <div class="metric-label mb-1">Puntos Totales</div>
+              <div class="metric-value" id="stat-points">0</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card p-3 text-center h-100">
+              <div class="metric-label mb-1">Retos CTF</div>
+              <div class="metric-value" id="stat-ctf">0 / 0</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card p-3 text-center h-100">
+              <div class="metric-label mb-1">Casos Phishing</div>
+              <div class="metric-value" id="stat-phishing">0</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card p-3 text-center h-100">
+              <div class="metric-label mb-1">Certificado</div>
+              <div class="metric-value small" id="stat-cert-status">En Proceso</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="card p-4 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold mb-0"><i class="fa-solid fa-chart-pie me-2 text-primary"></i> Resumen de Seguridad</h4>
+              </div>
+              <div class="small text-muted mb-3">Tu salud digital se evalúa en tiempo real según tu capacidad para detectar amenazas y resolver retos.</div>
+              <div class="progress" role="progressbar" aria-label="progreso" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="height: 18px;">
+                <div id="security-progress" class="progress-bar bg-primary" style="width: 40%;"></div>
+              </div>
+              <div class="d-flex justify-content-between mt-2 small text-muted">
+                <span>Riesgo</span>
+                <span id="security-label">Nivel de vulnerabilidad medio</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card p-4 h-100">
+              <h4 class="fw-bold mb-3"><i class="fa-solid fa-shield-heart me-2 text-primary"></i> Misión del día</h4>
+              <ul class="list-unstyled text-muted mb-0">
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Revisar 3 correos sospechosos</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Resolver al menos 1 reto CTF</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Mantener la credencial digital actualizada</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-training" class="view-section">
+        <div class="card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h3 class="fw-bold mb-1"><i class="fa-solid fa-shield-halved text-primary me-2"></i> Centro de Entrenamiento</h3>
+              <p class="text-muted mb-0">Practica decisiones seguras en situaciones digitales cotidianas.</p>
+            </div>
+            <span class="badge bg-dark border border-primary text-primary" id="training-counter">Escenario 1</span>
+          </div>
+
+          <div class="row g-3 align-items-end mb-4">
+            <div class="col-md-6">
+              <label for="scenario-filter" class="form-label">Tipo de entrenamiento</label>
+              <select id="scenario-filter" class="form-select">
+                <option value="all">Todos los escenarios</option>
+                <option value="phishing">Phishing por correo</option>
+                <option value="smishing">Smishing (SMS)</option>
+                <option value="vishing">Vishing (llamadas)</option>
+                <option value="password">Contraseñas y robo de cuentas</option>
+                <option value="wifi">Wi-Fi pública</option>
+                <option value="file">Archivos sospechosos</option>
+                <option value="social">Ingeniería social</option>
+              </select>
+            </div>
+            <div class="col-md-6 text-md-end">
+              <span class="badge bg-dark border border-secondary me-2">Respuestas correctas: <strong id="training-accuracy">0%</strong></span>
+              <span class="badge bg-dark border border-secondary">Insignias: <strong id="badge-count">0</strong></span>
+            </div>
+          </div>
+
+          <div class="card p-3 mb-3">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <span id="scenario-category" class="badge bg-primary">Entrenamiento</span>
+              <span id="scenario-channel" class="badge bg-secondary">Escenario</span>
+            </div>
+            <div class="small text-uppercase text-muted mb-2">Remitente</div>
+            <div id="mail-sender" class="fw-bold"></div>
+            <div class="small text-uppercase text-muted mt-3 mb-2">Asunto</div>
+            <div id="mail-subject" class="fw-semibold"></div>
+            <div class="small text-uppercase text-muted mt-3 mb-2">Contenido</div>
+            <div id="mail-body" class="scenario-body"></div>
+          </div>
+
+          <div id="training-action-box" class="d-grid gap-2 mt-4" aria-live="polite"></div>
+
+          <div id="training-feedback" class="mt-4 p-3 rounded d-none"></div>
+
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <span id="scenario-speed" class="small text-muted">Analiza las señales antes de decidir.</span>
+            <button class="btn btn-primary d-none" id="btn-next-mail" onclick="nextTrainingMail()">Siguiente escenario <i class="fa-solid fa-arrow-right ms-1"></i></button>
+          </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+          <div class="col-lg-7">
+            <div class="card p-4 h-100">
+              <h4 class="fw-bold mb-2"><i class="fa-solid fa-key text-primary me-2"></i> Laboratorio de contraseñas</h4>
+              <p class="text-muted small">Prueba una contraseña inventada. No escribas una contraseña que uses realmente; el análisis ocurre localmente en esta página y no se guarda.</p>
+              <label for="password-practice" class="form-label">Contraseña de práctica</label>
+              <div class="input-group">
+                <input id="password-practice" class="form-control" type="password" autocomplete="new-password" placeholder="Escribe una contraseña ficticia" maxlength="64" />
+                <button id="toggle-password" class="btn btn-outline-secondary" type="button" aria-label="Mostrar contraseña"><i class="fa-solid fa-eye"></i></button>
+                <button id="check-password" class="btn btn-primary" type="button">Evaluar</button>
+              </div>
+              <div class="progress mt-3" style="height: 12px;" role="progressbar" aria-label="fortaleza de contraseña">
+                <div id="password-strength-bar" class="progress-bar" style="width: 0%"></div>
+              </div>
+              <div id="password-feedback" class="small mt-2 text-muted" aria-live="polite">Se evaluarán longitud, variedad y patrones comunes; no se intentará descifrarla.</div>
+              <div class="mt-3">
+                <button id="password-quiz" type="button" class="btn btn-outline-primary btn-sm">Reto rápido: ¿cuál es más segura?</button>
+                <div id="password-quiz-options" class="d-flex flex-wrap gap-2 mt-2"></div>
+                <div id="password-quiz-feedback" class="small mt-2" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="card p-4 h-100">
+              <h4 class="fw-bold mb-2"><i class="fa-solid fa-award text-primary me-2"></i> Insignias</h4>
+              <p class="text-muted small">Gana reconocimientos al completar entrenamientos con buenas decisiones.</p>
+              <div id="badges-container" class="d-flex flex-wrap gap-2"></div>
+              <div class="border-top border-secondary mt-3 pt-3">
+                <div class="small text-muted">Progreso de aprendizaje</div>
+                <div id="training-summary" class="fw-semibold">Aún no hay respuestas registradas.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-glossary" class="view-section">
+        <div class="card p-4">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+              <h3 class="fw-bold mb-1"><i class="fa-solid fa-book text-primary me-2"></i> Glosario de Ciberseguridad</h3>
+              <p class="text-muted mb-0">Conceptos clave para reconocer amenazas y actuar con criterio.</p>
+            </div>
+            <div class="w-100 w-md-50">
+              <input id="glossary-search" type="text" class="form-control" placeholder="Buscar por nombre, categoría o descripción..." />
+            </div>
+          </div>
+          <div id="glossary-container" class="row g-4"></div>
+        </div>
+      </section>
+
+      <section id="view-ctf" class="view-section">
+        <div class="card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h3 class="fw-bold mb-1"><i class="fa-solid fa-flag text-primary me-2"></i> Retos CTF</h3>
+              <p class="text-muted mb-0">Resuelve desafíos de seguridad para ganar XP y desbloquear tu perfil.</p>
+            </div>
+            <span id="ctf-top-badge" class="badge badge-media px-3 py-2">0 / 0 Banderas Capturadas</span>
+          </div>
+          <div id="ctf-container" class="row g-4"></div>
+        </div>
+      </section>
+
+      <section id="view-credential" class="view-section">
+        <div class="card p-4">
+          <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+              <div class="credencial-card p-4 rounded-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div>
+                    <div class="small text-uppercase text-primary mb-1">CIBERGUARD</div>
+                    <h3 class="fw-bold mb-0" id="cred-name">Estudiante</h3>
+                  </div>
+                  <span id="cred-rank" class="badge badge-baja px-2 py-1">Novato</span>
+                </div>
+                <div class="mb-3">
+                  <div class="small text-muted">Institución</div>
+                  <div id="cred-inst" class="fw-semibold">Universidad Tecnológica</div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="small text-muted">ID</div>
+                    <div id="cred-id" class="font-monospace fw-semibold">CG-000000</div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="small text-muted">Experiencia</div>
+                    <div id="cred-xp" class="fw-semibold">0 XP</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 text-center">
+              <div class="qr-wrapper">
+                <img id="qr-code-img" alt="Código QR de credencial" src="" />
+              </div>
+              <div class="mt-3 d-flex justify-content-center gap-2 flex-wrap">
+                <button class="btn btn-primary px-4 py-2" onclick="window.print()"><i class="fa-solid fa-print me-2"></i> Imprimir Credencial</button>
+                <button class="btn btn-outline-primary px-4 py-2" onclick="openScannerModal()"><i class="fa-solid fa-qrcode me-2"></i> Simular Escaneo QR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-reports" class="view-section">
+        <div class="card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h3 class="fw-bold mb-1"><i class="fa-solid fa-file-shield text-primary me-2"></i> Reportes & Diploma</h3>
+              <p class="text-muted mb-0">Resumen del progreso y competencias adquiridas.</p>
+            </div>
+            <button class="btn btn-outline-primary" onclick="exportReportJSON()"><i class="fa-solid fa-download me-2"></i> Descargar Reporte JSON</button>
+          </div>
+
+          <div class="row g-4 mb-3">
+            <div class="col-md-4">
+              <div class="card p-3 h-100">
+                <div class="text-muted small">Casos phishing aprobados</div>
+                <div class="metric-value" id="report-phishing-count">0</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card p-3 h-100">
+                <div class="text-muted small">Retos CTF</div>
+                <div class="metric-value" id="report-ctf-count">0 / 0</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card p-3 h-100">
+                <div class="text-muted small">Experiencia</div>
+                <div class="metric-value" id="report-xp-count">0 XP</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-primary p-3 mb-4">
+            <div class="small text-uppercase text-primary mb-2">Rango actual</div>
+            <div id="report-rank-text" class="fw-bold">Novato</div>
+          </div>
+
+          <div id="cert-action-area" class="mt-2"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-secondary">
+          <div class="modal-header border-secondary">
+            <h5 class="modal-title" id="profileModalLabel">Editar perfil de estudiante</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="input-student-name" class="form-label">Nombre</label>
+              <input type="text" id="input-student-name" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="input-student-inst" class="form-label">Institución</label>
+              <input type="text" id="input-student-inst" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="input-student-id" class="form-label">ID</label>
+              <input type="text" id="input-student-id" class="form-control" readonly />
+            </div>
+          </div>
+          <div class="modal-footer border-secondary">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="saveStudentProfile()">Guardar Cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="scannerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-secondary">
+          <div class="modal-header border-secondary">
+            <h5 class="modal-title">Escaneo QR simulado</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="alert alert-info bg-info bg-opacity-10 border-info text-info small mb-3">
+              Escaneo validado con la credencial digital del estudiante.
+            </div>
+            <div id="lector" class="rounded border border-primary p-3 bg-black">
+              <div class="text-white small">Simulador de lector QR</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="diplomaModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark border border-secondary">
+          <div class="modal-header border-secondary">
+            <h5 class="modal-title">Certificado Digital</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="border border-primary rounded p-4 text-center">
+              <div class="small text-uppercase text-primary">CIBERGUARD</div>
+              <h3 class="mt-3 fw-bold">Diploma de Participación</h3>
+              <p class="mb-3 text-muted">Se otorga a</p>
+              <h4 id="diploma-name" class="fw-bold mb-4">Estudiante</h4>
+              <p class="mb-0 text-muted">Por completar con éxito el programa de sensibilización en ciberseguridad y análisis de amenazas digitales.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
