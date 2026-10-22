@@ -2,6 +2,8 @@ let appState = null;
 let trainingMails = [];
 let glossaryData = [];
 let ctfChallenges = [];
+let studyRoadmap = null;
+let studyExercises = [];
 let currentScenario = null;
 let scenarioStartedAt = 0;
 let currentAuthMode = 'login';
@@ -122,20 +124,25 @@ async function logout() {
 }
 
 async function loadAuthenticatedApp() {
-  const [progress, scenarios, glossary, ctfs, quizOptions] = await Promise.all([
+  const [progress, scenarios, glossary, ctfs, quizOptions, roadmap, exercises] = await Promise.all([
     apiRequest('/api/progress'),
     apiRequest('/api/scenarios'),
     apiRequest('/api/glossary'),
     apiRequest('/api/ctf'),
     apiRequest('/api/password-quiz'),
+    apiRequest('/api/study-roadmap'),
+    apiRequest('/api/study-exercises'),
   ]);
   appState = progress;
   trainingMails = scenarios;
   glossaryData = glossary;
   ctfChallenges = ctfs;
   passwordOptions = quizOptions;
+  studyRoadmap = roadmap;
+  studyExercises = exercises;
   renderGlossary(glossaryData);
   renderCtfs();
+  renderStudyRoadmap();
   updateUI();
   showNextScenario();
   hideAuthGate();
@@ -270,7 +277,15 @@ function renderScenario(scenario) {
   scenarioStartedAt = Date.now();
   const scenarios = getFilteredScenarios();
   const counter = document.getElementById('training-counter');
-  if (counter) counter.innerText = `Escenario ${scenarios.indexOf(scenario) + 1} de ${scenarios.length}`;
+  if (counter) {
+    counter.innerText = scenario.liveGenerated
+      ? scenario.simulationKind === 'ai-generated'
+        ? 'Variación generada con IA'
+        : scenario.simulationKind === 'attack-simulation'
+          ? 'Simulación defensiva · Wi-Fi'
+          : 'Ejercicio dinámico · Wi-Fi'
+      : `Escenario ${scenarios.indexOf(scenario) + 1} de ${scenarios.length}`;
+  }
   document.getElementById('scenario-category').innerText = scenario.category;
   document.getElementById('scenario-channel').innerText = scenario.channel;
   document.getElementById('mail-sender').innerText = scenario.sender;
@@ -294,6 +309,47 @@ function renderScenario(scenario) {
   feedback.replaceChildren();
   document.getElementById('btn-next-mail').classList.add('d-none');
   document.getElementById('scenario-speed').innerText = 'Analiza remitente, contexto, urgencia y datos solicitados.';
+}
+
+async function generateLiveScenario() {
+  const button = document.getElementById('generate-live-scenario');
+  button.disabled = true;
+  try {
+    const scenario = await apiRequest('/api/scenarios/live', { method: 'POST' });
+    renderScenario(scenario);
+    document.getElementById('scenario-speed').innerText =
+      scenario.simulationKind === 'attack-simulation'
+        ? 'Incidente ficticio: observa las señales y elige cómo protegerte y reportarlo. No se realiza ninguna acción en una red.'
+        : 'Ejercicio ficticio generado localmente. Revisa la situación y elige una respuesta defensiva.';
+  } catch (error) {
+    showTrainingError(error.message);
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function generateAiScenario() {
+  if (!currentScenario) {
+    showTrainingError('Primero selecciona un ejercicio para crear una variación.');
+    return;
+  }
+  const button = document.getElementById('generate-ai-scenario');
+  button.disabled = true;
+  button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Generando…';
+  try {
+    const scenario = await apiRequest('/api/scenarios/ai', {
+      method: 'POST',
+      body: JSON.stringify({ scenario_id: currentScenario.id }),
+    });
+    renderScenario(scenario);
+    document.getElementById('scenario-speed').innerText =
+      'Variación creada por OpenRouter. Las opciones y la puntuación siguen validadas por el servidor.';
+  } catch (error) {
+    showTrainingError(error.message);
+  } finally {
+    button.disabled = false;
+    button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i>Variación IA (API)';
+  }
 }
 
 function appendFeedbackLine(parent, className, text) {
@@ -320,6 +376,9 @@ async function submitScenarioDecision(decisionIndex) {
     appendFeedbackLine(feedback, 'mb-2', result.feedback);
     appendFeedbackLine(feedback, 'mb-2', `Resultado de esta ruta: ${result.consequence}`);
     if (result.score > 0) appendFeedbackLine(feedback, 'mb-0 fw-semibold', `+${result.score} XP.`);
+    if (result.practiceOnly) {
+      appendFeedbackLine(feedback, 'small mt-2 mb-0', 'Ya recibiste los puntos por este tipo de práctica. Puedes seguir entrenando con nuevas variaciones.');
+    }
     if (result.alreadyRecorded) appendFeedbackLine(feedback, 'small mt-2 mb-0', 'Esta decisión ya estaba registrada; no se otorgaron puntos adicionales.');
 
     if (!result.safe && result.recoveryAvailable) {
@@ -342,8 +401,11 @@ function renderRecoveryBranch(container) {
   prompt.className = 'fw-semibold mb-2';
   prompt.innerText = 'En esta ruta simulada, una acción de riesgo ya ocurrió. ¿Qué haces ahora?';
   container.appendChild(prompt);
+  const safeRecoveryText = currentScenario?.type === 'wifi'
+    ? 'Desconectarte, usar datos móviles y avisar al soporte por un canal oficial'
+    : 'Detener la interacción y reportar por un canal oficial';
   [
-    { safe: true, text: 'Detener la interacción y reportar por un canal oficial' },
+    { safe: true, text: safeRecoveryText },
     { safe: false, text: 'Seguir las instrucciones del mensaje o la llamada' },
   ].forEach((option) => {
     const button = document.createElement('button');
@@ -370,6 +432,13 @@ async function submitRecoveryDecision(safe) {
       'mt-2 fw-semibold',
       result.score ? `+${result.score} XP: ${result.feedback}` : result.feedback,
     );
+    if (result.practiceOnly) {
+      appendFeedbackLine(
+        document.getElementById('training-feedback'),
+        'small mt-2 mb-0',
+        'Ya recibiste los puntos por este tipo de práctica. Puedes seguir entrenando con nuevas variaciones.',
+      );
+    }
     document.getElementById('training-action-box').classList.add('d-none');
     document.getElementById('btn-next-mail').classList.remove('d-none');
   } catch (error) {
@@ -424,6 +493,156 @@ function filterGlossary() {
   renderGlossary(glossaryData.filter((item) =>
     `${item.title} ${item.desc} ${item.category}`.toLocaleLowerCase().includes(query)
   ));
+}
+
+function createTextList(items, className = 'text-muted') {
+  const list = document.createElement('ul');
+  list.className = className;
+  items.forEach((item) => {
+    const entry = document.createElement('li');
+    entry.className = 'mb-1';
+    entry.innerText = item;
+    list.appendChild(entry);
+  });
+  return list;
+}
+
+function createRoadmapDetails(title, content, initiallyOpen = false) {
+  const details = document.createElement('details');
+  details.className = 'card p-3 mb-3';
+  details.open = initiallyOpen;
+  const summary = document.createElement('summary');
+  summary.className = 'fw-bold text-primary';
+  summary.innerText = title;
+  details.appendChild(summary);
+  const body = document.createElement('div');
+  body.className = 'mt-3';
+  content(body);
+  details.appendChild(body);
+  return details;
+}
+
+function addRoadmapListSection(container, title, items) {
+  const heading = document.createElement('h4');
+  heading.className = 'h6 fw-bold mt-3';
+  heading.innerText = title;
+  container.append(heading, createTextList(items));
+}
+
+function renderStudyExercise(exercise) {
+  const card = document.createElement('article');
+  card.className = 'border border-secondary rounded p-3 mt-3';
+  const title = document.createElement('h4');
+  title.className = 'h6 fw-bold';
+  title.innerText = exercise.title;
+  const prompt = document.createElement('p');
+  prompt.className = 'small mb-3';
+  prompt.innerText = exercise.prompt;
+  const options = document.createElement('div');
+  options.className = 'd-grid gap-2';
+  const feedback = document.createElement('p');
+  feedback.className = 'small mt-3 mb-0 d-none';
+  feedback.setAttribute('aria-live', 'polite');
+
+  exercise.options.forEach((option, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn btn-outline-secondary text-start';
+    button.innerText = `${String.fromCharCode(65 + index)}. ${option}`;
+    button.addEventListener('click', async () => {
+      options.querySelectorAll('button').forEach((choice) => { choice.disabled = true; });
+      try {
+        const result = await apiRequest(
+          `/api/study-exercises/${encodeURIComponent(exercise.id)}/answer`,
+          {
+            method: 'POST',
+            body: JSON.stringify({ answer_index: index }),
+          },
+        );
+        const isCorrect = result.correct;
+        feedback.className = `small mt-3 mb-0 ${isCorrect ? 'text-success' : 'text-warning'}`;
+        feedback.innerText = `${isCorrect ? 'Correcto.' : `Respuesta correcta: ${String.fromCharCode(65 + result.correctIndex)}.`} ${result.explanation}`;
+      } catch (error) {
+        options.querySelectorAll('button').forEach((choice) => { choice.disabled = false; });
+        feedback.className = 'small mt-3 mb-0 text-danger';
+        feedback.innerText = error.message;
+      }
+    });
+    options.appendChild(button);
+  });
+
+  card.append(title, prompt, options, feedback);
+  return card;
+}
+
+function renderStudyRoadmap() {
+  if (!studyRoadmap) return;
+  document.getElementById('roadmap-title').innerText = studyRoadmap.title;
+  document.getElementById('roadmap-notice').innerText = studyRoadmap.notice;
+
+  const semesters = document.getElementById('roadmap-semesters');
+  semesters.replaceChildren();
+  studyRoadmap.semesters.forEach((semester) => {
+    semesters.appendChild(createRoadmapDetails(
+      `Semestre ${semester.semester} — ${semester.title}`,
+      (body) => {
+        addRoadmapListSection(body, 'Temas técnicos', semester.cyberTopics);
+        const practice = document.createElement('p');
+        practice.className = 'small';
+        practice.innerText = `Práctica sugerida: ${semester.practice}`;
+        const outcome = document.createElement('p');
+        outcome.className = 'small mb-0';
+        outcome.innerText = `Al finalizar: ${semester.outcome}`;
+        body.append(practice, outcome);
+        const exercises = studyExercises.filter((exercise) => exercise.semester === semester.semester);
+        if (exercises.length) {
+          const exerciseHeading = document.createElement('h4');
+          exerciseHeading.className = 'h6 fw-bold mt-4';
+          exerciseHeading.innerText = 'Problemas de práctica';
+          body.appendChild(exerciseHeading);
+          exercises.forEach((exercise) => body.appendChild(renderStudyExercise(exercise)));
+        }
+      },
+      semester.semester === 1,
+    ));
+  });
+
+  const modules = document.getElementById('roadmap-modules');
+  modules.replaceChildren();
+  document.getElementById('roadmap-module-note').innerText =
+    `${studyRoadmap.technicalModules.length} módulos · ${studyRoadmap.reportedTechnicalHours} horas de práctica técnica de referencia. ${studyRoadmap.technicalPlanNote}`;
+  studyRoadmap.technicalModules.forEach((module) => {
+    modules.appendChild(createRoadmapDetails(module.title, (body) => {
+      module.submodules.forEach((submodule) => {
+        const heading = document.createElement('h4');
+        heading.className = 'h6 fw-bold mt-3';
+        heading.innerText = submodule.title;
+        const hours = document.createElement('p');
+        hours.className = 'small text-muted mb-2';
+        hours.innerText = submodule.hours === null
+          ? 'Horas: confirmar con el plan vigente del plantel.'
+          : `Horas de referencia: ${submodule.hours}`;
+        body.append(heading, hours, createTextList(submodule.topics));
+      });
+    }));
+  });
+
+  const selfStudy = document.getElementById('roadmap-self-study');
+  selfStudy.replaceChildren();
+  studyRoadmap.selfStudy.forEach((stage) => {
+    selfStudy.appendChild(createRoadmapDetails(stage.title, (body) => {
+      body.appendChild(createTextList(stage.topics));
+    }));
+  });
+
+  document.getElementById('roadmap-career-guidance').replaceChildren(
+    ...studyRoadmap.careerGuidance.map((text) => {
+      const entry = document.createElement('li');
+      entry.className = 'mb-2';
+      entry.innerText = text;
+      return entry;
+    }),
+  );
 }
 
 function renderCtfs() {
@@ -694,6 +913,8 @@ async function initializeApp() {
   document.getElementById('logout-button').addEventListener('click', logout);
   document.getElementById('glossary-search').addEventListener('input', filterGlossary);
   document.getElementById('scenario-filter').addEventListener('change', handleScenarioFilter);
+  document.getElementById('generate-live-scenario').addEventListener('click', generateLiveScenario);
+  document.getElementById('generate-ai-scenario').addEventListener('click', generateAiScenario);
   document.getElementById('check-password').addEventListener('click', evaluatePassword);
   document.getElementById('toggle-password').addEventListener('click', () => {
     const input = document.getElementById('password-practice');

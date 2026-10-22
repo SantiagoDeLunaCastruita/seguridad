@@ -1,0 +1,258 @@
+{
+  "title": "Ruta de aprendizaje en ciberseguridad",
+  "notice": "Programa técnico organizado en seis etapas para aprender programación aplicada a seguridad, redes, sistemas, defensa y respuesta a incidentes. Practica únicamente en tus propios equipos o en laboratorios expresamente autorizados.",
+  "semesters": [
+    {
+      "semester": 1,
+      "title": "Fundamentos de computación y seguridad",
+      "cyberTopics": [
+        "Arquitectura básica de computadoras: CPU, memoria, almacenamiento, firmware y periféricos.",
+        "Representación binaria y hexadecimal aplicada a datos y redes.",
+        "Lógica de programación, condiciones y control de acceso.",
+        "Activos, amenazas, vulnerabilidades, impacto y riesgo.",
+        "Privacidad, actualizaciones, copias de seguridad y uso responsable de sistemas."
+      ],
+      "practice": "Crea en Python un inventario ficticio de activos y clasifica su nivel de riesgo con reglas simples.",
+      "outcome": "Explica los componentes de un sistema y usa lógica básica para describir controles de seguridad."
+    },
+    {
+      "semester": 2,
+      "title": "Programación inicial y fundamentos de redes",
+      "cyberTopics": [
+        "Python: variables, tipos, condiciones, ciclos, funciones y manejo de errores.",
+        "Archivos de texto y registros sintéticos: lectura, filtrado y resumen.",
+        "Modelo cliente-servidor, LAN, WAN, DNS, HTTP y conceptos de Wi-Fi.",
+        "Modelos OSI y TCP/IP: capas y protocolos desde una perspectiva defensiva.",
+        "Contraseñas únicas, MFA, phishing, privacidad y protección de cuentas."
+      ],
+      "practice": "Escribe un script local que clasifique eventos de un registro ficticio por tipo y severidad.",
+      "outcome": "Automatiza una tarea sencilla con Python y describe el recorrido general de una comunicación."
+    },
+    {
+      "semester": 3,
+      "title": "Sistemas operativos, permisos y análisis de riesgos",
+      "cyberTopics": [
+        "Procesos, servicios, archivos, usuarios, grupos y permisos en Windows y Linux.",
+        "Terminal básica: rutas, navegación, ayuda y lectura de archivos en una máquina propia.",
+        "Cuentas con mínimo privilegio, actualizaciones, bloqueo de pantalla y copias de seguridad.",
+        "Amenaza, vulnerabilidad, incidente, impacto y probabilidad; registro de hallazgos.",
+        "Introducción a ética, consentimiento, alcance autorizado y legislación aplicable."
+      ],
+      "practice": "En una máquina virtual propia y aislada, configura usuarios de prueba con privilegios mínimos y registra los cambios.",
+      "outcome": "Administra permisos básicos y propone medidas de hardening para Windows y Linux."
+    },
+    {
+      "semester": 4,
+      "title": "Redes seguras, identidad y control de acceso",
+      "cyberTopics": [
+        "Redes de computadoras: topologías, dispositivos y funciones dentro de una LAN.",
+        "IPv4, IPv6, MAC, DHCP, DNS, puerta de enlace, puertos y servicios a nivel conceptual.",
+        "Subredes y direccionamiento; lectura de diagramas y configuración en una topología de laboratorio.",
+        "Enrutamiento, switching, VLAN y segmentación como conceptos de diseño defensivo.",
+        "Identidad digital, autenticación, autorización, MFA, RBAC y principio de mínimo privilegio.",
+        "Gobernanza, políticas, gestión de activos, continuidad y nociones de cumplimiento como ISO/IEC 27001."
+      ],
+      "practice": "Diseña una topología ficticia con segmentos separados para usuarios, administración e invitados; justifica las reglas de acceso.",
+      "outcome": "Interpreta una topología sencilla y explica cómo identidad, segmentación y políticas reducen riesgos."
+    },
+    {
+      "semester": 5,
+      "title": "Desarrollo seguro, redes y bases de datos",
+      "cyberTopics": [
+        "Confidencialidad, integridad y disponibilidad; clasificación y ciclo de vida de la información.",
+        "Criptografía: propósito del cifrado, hashes, firmas y gestión de claves; no reutilizar contraseñas.",
+        "Firewalls, VPN, IDS/IPS, segmentación y monitoreo como controles defensivos.",
+        "Bases de datos: roles, permisos, consultas parametrizadas, respaldos y restauración.",
+        "Amenazas de aplicaciones y prácticas de desarrollo seguro a nivel de diseño.",
+        "Gestión de vulnerabilidades: identificar, priorizar por riesgo, corregir y verificar en entornos autorizados."
+      ],
+      "practice": "Crea una aplicación y base de datos de práctica con datos ficticios, consultas parametrizadas, roles y respaldo restaurable.",
+      "outcome": "Selecciona controles para proteger datos y servicios, y documenta la justificación según el riesgo."
+    },
+    {
+      "semester": 6,
+      "title": "Monitoreo, forense y respuesta a incidentes",
+      "cyberTopics": [
+        "Análisis de registros y eventos; línea de tiempo, indicadores y separación entre hechos e hipótesis.",
+        "Fundamentos de TCP/IP, DNS y HTTP para interpretar alertas y capturas autorizadas.",
+        "Monitoreo y conceptos SIEM; detección de anomalías y reducción de falsos positivos.",
+        "Respuesta a incidentes: preparación, identificación, contención, recuperación y lecciones aprendidas.",
+        "Forense digital: preservación, integridad, cadena de custodia y documentación de evidencia.",
+        "Auditoría: alcance, criterios, pruebas autorizadas, hallazgos, impacto y recomendaciones.",
+        "Malware: comportamiento y prevención desde análisis seguro; nunca ejecutar muestras en equipos personales."
+      ],
+      "practice": "Analiza registros sintéticos proporcionados por el curso, crea una cronología y redacta un informe de incidente sin atribuir causas no demostradas.",
+      "outcome": "Presenta un informe claro y reproducible con evidencias de laboratorio, límites, impacto y acciones de respuesta."
+    }
+  ],
+  "technicalModules": [
+    {
+      "id": "programming-security",
+      "title": "Módulo I — Programación para seguridad",
+      "submodules": [
+        {
+          "title": "Diseña algoritmos para problemas de seguridad",
+          "hours": 96,
+          "topics": [
+            "Descomposición y modelado de problemas.",
+            "Algoritmos, pseudocódigo, diagramas de flujo y pruebas con casos ficticios.",
+            "Lógica para roles, permisos y controles de acceso.",
+            "Validación de entradas, errores y registro seguro de eventos."
+          ]
+        },
+        {
+          "title": "Implementa scripts para resolver problemas",
+          "hours": 176,
+          "topics": [
+            "Fundamentos de Python o Bash en tareas locales y autorizadas.",
+            "Lectura y análisis de archivos de registro sintéticos.",
+            "Automatización de inventarios y comprobaciones defensivas.",
+            "Manejo de archivos, excepciones, pruebas y documentación.",
+            "No automatizar exploración de redes de terceros ni acceso sin permiso."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "operating-systems",
+      "title": "Módulo II — Sistemas operativos",
+      "submodules": [
+        {
+          "title": "Configura sistemas operativos en ambiente físico",
+          "hours": 128,
+          "topics": [
+            "Instalación y configuración básica de Windows y Linux.",
+            "Usuarios, grupos, permisos, servicios y principio de mínimo privilegio.",
+            "Actualizaciones, firewall local, cifrado de disco y copias de seguridad.",
+            "Líneas base de configuración segura y documentación de cambios."
+          ]
+        },
+        {
+          "title": "Configura sistemas operativos en la nube",
+          "hours": 144,
+          "topics": [
+            "Virtualización, imágenes, snapshots y responsabilidad compartida.",
+            "Conceptos de instancias en AWS, Azure o Google Cloud.",
+            "Identidades, roles, redes privadas y almacenamiento con acceso restringido.",
+            "Backups, monitoreo y apagado de recursos de práctica para evitar cargos."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-mitigation",
+      "title": "Módulo III — Mitigación de riesgos",
+      "submodules": [
+        {
+          "title": "Detecta vulnerabilidades en sistemas informáticos",
+          "hours": 128,
+          "topics": [
+            "Inventario y evaluación de configuraciones en sistemas propios o laboratorios aprobados.",
+            "Conceptos de CVE, severidad, exposición, probabilidad e impacto.",
+            "Revisión de parches, dependencias y configuraciones inseguras.",
+            "Priorización de hallazgos con evidencia y alcance documentado."
+          ]
+        },
+        {
+          "title": "Corrige vulnerabilidades en sistemas informáticos",
+          "hours": 144,
+          "topics": [
+            "Aplicación controlada de parches y validación posterior.",
+            "Hardening de servicios, permisos y políticas de contraseñas.",
+            "Control de acceso por roles y revisión periódica de privilegios.",
+            "Gestión de cambios, plan de reversión y evidencia de corrección."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "network-monitoring",
+      "title": "Módulo IV — Monitoreo de redes",
+      "submodules": [
+        {
+          "title": "Detecta riesgos en una red de datos",
+          "hours": null,
+          "topics": [
+            "Fundamentos TCP/IP, DNS, HTTP y TLS para lectura defensiva.",
+            "Seguridad Wi-Fi: reconocer WEP como obsoleto, preferir WPA2-AES o WPA3 y desactivar WPS cuando no sea necesario.",
+            "Análisis de capturas proporcionadas por el instructor o generadas en laboratorio.",
+            "IDS/IPS, alertas, anomalías y conceptos de falsos positivos.",
+            "Wireshark solo para tráfico propio o expresamente autorizado."
+          ]
+        },
+        {
+          "title": "Configura controles de seguridad de red",
+          "hours": null,
+          "topics": [
+            "Reglas de firewall y filtrado por necesidad.",
+            "Segmentación, VLAN, VPN y protección de redes inalámbricas.",
+            "pfSense o iptables como temas de laboratorio defensivo y aislado.",
+            "Registro, monitoreo, revisión de cambios y diagnóstico seguro."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "forensics-response",
+      "title": "Módulo V — Forense y respuesta a incidentes",
+      "submodules": [
+        {
+          "title": "Evalúa seguridad mediante pruebas autorizadas",
+          "hours": null,
+          "topics": [
+            "Alcance, autorización escrita, reglas de engagement y gestión del riesgo.",
+            "Metodologías de evaluación y criterios para detener una prueba.",
+            "Hallazgos reproducibles en laboratorio, impacto, mitigación e informe.",
+            "Reconocimiento conceptual de Kali Linux, Nmap, Metasploit y Burp Suite; cualquier práctica requiere un laboratorio deliberadamente vulnerable, aislado y autorizado, con foco en informe y remediación."
+          ]
+        },
+        {
+          "title": "Preserva evidencias y responde a incidentes",
+          "hours": null,
+          "topics": [
+            "Cadena de custodia, integridad, hashes y registro de transferencias.",
+            "Adquisición forense controlada con herramientas aprobadas por el curso.",
+            "Análisis de copias de disco, memoria y registros en imágenes de práctica.",
+            "Línea de tiempo, dictamen técnico, privacidad y protección de datos.",
+            "Contención, recuperación, comunicación y lecciones aprendidas."
+          ]
+        }
+      ]
+    }
+  ],
+  "technicalPlanNote": "Las horas indicadas son referencias para organizar la práctica técnica; los submódulos sin carga horaria especificada se dejan sin estimación.",
+  "reportedTechnicalHours": 1200,
+  "selfStudy": [
+    {
+      "title": "Semestres 1–2: fundamentos",
+      "topics": [
+        "Python básico y lógica de programación.",
+        "Comandos introductorios de Linux en una máquina propia o virtual.",
+        "Modelo OSI/TCP-IP, binario, privacidad y gestión de contraseñas."
+      ]
+    },
+    {
+      "title": "Semestres 3–4: sistemas y redes",
+      "topics": [
+        "Usuarios, permisos y hardening básico de Windows y Linux.",
+        "Subredes, direccionamiento y enrutamiento en topologías de laboratorio.",
+        "Fundamentos de criptografía, firewalls, identidad y control de acceso."
+      ]
+    },
+    {
+      "title": "Semestres 5–6: defensa y especialización",
+      "topics": [
+        "Análisis de logs, monitoreo, SIEM introductorio y respuesta a incidentes.",
+        "Bases de datos, respaldos, auditoría y forense con datos sintéticos.",
+        "Pentesting solo como evaluación autorizada en laboratorios aislados; prioriza remediación e informes."
+      ]
+    }
+  ],
+  "careerGuidance": [
+    "Construye un laboratorio doméstico aislado con máquinas virtuales y sistemas deliberadamente vulnerables; no expongas servicios vulnerables a Internet.",
+    "Practica soporte técnico y respuesta a incidentes usando inventarios, registros ficticios, documentación y procedimientos de recuperación.",
+    "Investiga certificaciones de ciberseguridad como CompTIA Security+ o eJPT según tu nivel; comprueba requisitos, costo y vigencia con cada entidad.",
+    "Mantén un portafolio con scripts defensivos, diagramas, análisis de registros sintéticos y reportes de remediación, sin publicar datos sensibles.",
+    "Realiza evaluaciones de seguridad únicamente con autorización explícita y dentro del alcance acordado."
+  ]
+}

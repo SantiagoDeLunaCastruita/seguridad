@@ -1,0 +1,170 @@
+[
+  {
+    "id": "stage-1-risk-priority",
+    "semester": 1,
+    "title": "Clasificar un riesgo",
+    "prompt": "Un equipo ficticio guarda datos de estudiantes y no recibe actualizaciones. ¿Qué combinación ayuda más a priorizar su riesgo?",
+    "options": [
+      "Identificar los datos y activos afectados, la exposición y el impacto probable.",
+      "Contar cuántos iconos hay en el escritorio.",
+      "Cambiar el nombre del equipo sin revisar su uso.",
+      "Asumir que no existe riesgo si nadie se ha quejado."
+    ],
+    "correctIndex": 0,
+    "explanation": "La prioridad depende de qué activo se protege, qué tan expuesto está y qué impacto tendría un incidente. Después se decide cómo reducir el riesgo."
+  },
+  {
+    "id": "stage-1-access-logic",
+    "semester": 1,
+    "title": "Lógica de control de acceso",
+    "prompt": "Una regla dice: permitir acceso solo si la cuenta está activa Y el usuario tiene el rol autorizado. Si una de las condiciones es falsa, ¿qué debe ocurrir?",
+    "options": [
+      "Permitir el acceso si la cuenta tiene una contraseña larga.",
+      "Denegar el acceso porque ambas condiciones son necesarias.",
+      "Permitir el acceso y registrar el error después.",
+      "Ignorar el rol si el usuario conoce la dirección del servicio."
+    ],
+    "correctIndex": 1,
+    "explanation": "El operador lógico Y requiere que las dos condiciones sean verdaderas. Si la cuenta está inactiva o carece del rol, el sistema debe denegar el acceso."
+  },
+  {
+    "id": "stage-2-log-filter",
+    "semester": 2,
+    "title": "Filtrar eventos con Python",
+    "prompt": "Un programa educativo lee registros sintéticos. ¿Qué condición selecciona únicamente eventos cuya severidad sea 'alta' sin conectarse a ningún sistema?",
+    "options": [
+      "if evento['severidad'] == 'alta': guardar(evento)",
+      "while True: probar_contraseñas(evento)",
+      "if evento['ip']: iniciar_sesion(evento['ip'])",
+      "borrar_todos_los_registros()"
+    ],
+    "correctIndex": 0,
+    "explanation": "Filtrar datos locales por un campo conocido es una tarea de análisis defensivo. Los registros de práctica deben ser ficticios y el script no debe intentar acceder a equipos."
+  },
+  {
+    "id": "stage-2-account-alert",
+    "semester": 2,
+    "title": "Responder a una alerta de cuenta",
+    "prompt": "Recibes una solicitud MFA que no iniciaste. ¿Cuál es la respuesta más segura?",
+    "options": [
+      "Aprobarla para que deje de aparecer.",
+      "Compartir el código con quien llama diciendo ser soporte.",
+      "Rechazarla, cambiar la contraseña desde el sitio o app oficial y reportarla.",
+      "Reutilizar esa contraseña en otra cuenta."
+    ],
+    "correctIndex": 2,
+    "explanation": "Una solicitud no iniciada puede indicar un intento de acceso. Recházala, no compartas códigos y usa un canal oficial para proteger la cuenta."
+  },
+  {
+    "id": "stage-3-least-privilege",
+    "semester": 3,
+    "title": "Aplicar mínimo privilegio",
+    "prompt": "Una cuenta de laboratorio solo necesita leer reportes. ¿Qué permiso deberías asignarle?",
+    "options": [
+      "Administración completa del sistema.",
+      "Lectura de los reportes necesarios, sin permisos de escritura o administración.",
+      "La misma cuenta compartida para todo el grupo.",
+      "Acceso permanente a todos los archivos y servicios."
+    ],
+    "correctIndex": 1,
+    "explanation": "El mínimo privilegio limita cada cuenta a las acciones necesarias. Reduce el daño posible si una cuenta se usa por error o queda comprometida."
+  },
+  {
+    "id": "stage-3-patch-priority",
+    "semester": 3,
+    "title": "Priorizar una actualización",
+    "prompt": "Un servicio expuesto contiene una vulnerabilidad corregida por el fabricante. ¿Qué acción defensiva corresponde?",
+    "options": [
+      "Ignorarla porque ya existe una contraseña.",
+      "Aplicar el parche en un cambio controlado, probar el servicio y documentar el resultado.",
+      "Desactivar las copias de seguridad antes de actualizar.",
+      "Publicar detalles sensibles del servicio para pedir ayuda."
+    ],
+    "correctIndex": 1,
+    "explanation": "Las actualizaciones deben priorizarse según exposición e impacto, probarse de forma controlada y documentarse, con un plan de recuperación."
+  },
+  {
+    "id": "stage-4-segmentation",
+    "semester": 4,
+    "title": "Separar redes",
+    "prompt": "En una topología de práctica, la red de invitados solo necesita Internet. ¿Cómo reducirías su acceso a los sistemas internos?",
+    "options": [
+      "Poner invitados y administración en la misma red sin controles.",
+      "Crear segmentos separados y permitir solo el tráfico necesario mediante reglas de firewall.",
+      "Compartir la contraseña de administración con los invitados.",
+      "Desactivar todos los registros de red."
+    ],
+    "correctIndex": 1,
+    "explanation": "La segmentación limita el movimiento entre zonas. Las reglas deben permitir únicamente las comunicaciones necesarias."
+  },
+  {
+    "id": "stage-4-wifi-security",
+    "semester": 4,
+    "title": "Elegir seguridad Wi-Fi",
+    "prompt": "Al revisar un router propio, ¿qué ajuste es más adecuado para proteger la red inalámbrica?",
+    "options": [
+      "Mantener WEP y compartir el PIN WPS públicamente.",
+      "Usar WPA2-AES o WPA3, una contraseña única y desactivar WPS si no se necesita.",
+      "Desactivar toda autenticación para facilitar el acceso.",
+      "Usar el nombre del domicilio como contraseña."
+    ],
+    "correctIndex": 1,
+    "explanation": "WEP está obsoleto. WPA2-AES o WPA3 y una contraseña fuerte son opciones más seguras; desactiva funciones que no necesites y administra el router desde su interfaz oficial."
+  },
+  {
+    "id": "stage-5-sql-queries",
+    "semester": 5,
+    "title": "Proteger una consulta de base de datos",
+    "prompt": "Una aplicación debe buscar un usuario a partir de un campo escrito en un formulario. ¿Qué práctica reduce el riesgo de inyección SQL?",
+    "options": [
+      "Concatenar directamente el texto del formulario a la consulta.",
+      "Usar consultas parametrizadas y validar el formato esperado.",
+      "Dar permisos de administrador a la cuenta de la aplicación.",
+      "Ocultar el formulario sin cambiar el código del servidor."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los parámetros separan los datos del código SQL. También aplica validación y concede a la cuenta de la aplicación solo los permisos necesarios."
+  },
+  {
+    "id": "stage-5-hash-encryption",
+    "semester": 5,
+    "title": "Distinguir hash y cifrado",
+    "prompt": "Quieres comprobar si un archivo de respaldo cambió desde la última revisión. ¿Qué herramienta conceptual es apropiada?",
+    "options": [
+      "Comparar un hash criptográfico calculado de forma segura con el valor de referencia.",
+      "Usar una contraseña corta como nombre de archivo.",
+      "Desactivar las verificaciones de integridad.",
+      "Cambiar la extensión del archivo."
+    ],
+    "correctIndex": 0,
+    "explanation": "Un hash sirve para comparar integridad; no cifra ni oculta el contenido. El cifrado es el mecanismo para proteger la confidencialidad."
+  },
+  {
+    "id": "stage-6-evidence",
+    "semester": 6,
+    "title": "Preservar evidencia digital",
+    "prompt": "Durante un incidente se necesita revisar un registro original. ¿Qué práctica protege mejor su valor como evidencia?",
+    "options": [
+      "Editar el archivo original para resaltar las líneas importantes.",
+      "Preservar una copia, registrar quién la manejó, cuándo y calcular un hash de integridad.",
+      "Enviar el registro por un chat público.",
+      "Borrar eventos que parezcan irrelevantes."
+    ],
+    "correctIndex": 1,
+    "explanation": "Mantén el original sin modificar, documenta la cadena de custodia y trabaja sobre copias verificadas para preservar integridad y trazabilidad."
+  },
+  {
+    "id": "stage-6-siem-triage",
+    "semester": 6,
+    "title": "Triage de una alerta SIEM",
+    "prompt": "Una alerta automática señala varios inicios de sesión fallidos. ¿Qué debe hacer primero el analista?",
+    "options": [
+      "Afirmar que hubo una intrusión sin revisar evidencia.",
+      "Correlacionar registros y contexto, validar el alcance y documentar hallazgos antes de escalar.",
+      "Borrar las cuentas y todos los registros inmediatamente.",
+      "Publicar las direcciones y datos personales de los usuarios."
+    ],
+    "correctIndex": 1,
+    "explanation": "Una alerta puede ser un falso positivo. Correlaciona fuentes y contexto, conserva evidencia, determina el alcance y sigue el procedimiento de respuesta."
+  }
+]
