@@ -102,6 +102,10 @@ class BackendTests(unittest.TestCase):
         exercises = exercises_response.json()
         self.assertEqual(len(exercises), 12)
         self.assertEqual({exercise["semester"] for exercise in exercises}, set(range(1, 7)))
+        self.assertTrue(all(
+            sum(exercise["semester"] == semester for exercise in exercises) == 2
+            for semester in range(1, 7)
+        ))
         self.assertTrue(all("correctIndex" not in exercise for exercise in exercises))
         self.assertTrue(all("explanation" not in exercise for exercise in exercises))
 
@@ -137,6 +141,27 @@ class BackendTests(unittest.TestCase):
             json={"answer_index": 0},
         )
         self.assertEqual(missing_response.status_code, 404)
+
+    def test_glossary_covers_the_added_cybersecurity_topics(self):
+        self.assertEqual(self.register().status_code, 200)
+        response = self.client.get("/api/glossary")
+        self.assertEqual(response.status_code, 200)
+        terms = {item["title"] for item in response.json()}
+        self.assertGreaterEqual(len(terms), 60)
+        for term in (
+            "Hardening",
+            "RBAC",
+            "Modelo OSI",
+            "WPA3",
+            "IDS e IPS",
+            "SIEM",
+            "Consultas parametrizadas",
+            "CVE",
+            "Cadena de custodia",
+            "ISO/IEC 27001",
+        ):
+            with self.subTest(term=term):
+                self.assertIn(term, terms)
 
     def test_scenario_answers_and_points_are_server_authoritative(self):
         self.assertEqual(self.register().status_code, 200)
